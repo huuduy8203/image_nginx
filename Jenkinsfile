@@ -11,10 +11,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                // Build Docker image for Nginx
                 script {
-                    docker.withServer('tcp://docker-host:2376', 'docker-credentials-id') {
-                        docker.build('my-nginx-image:latest', '.')
-                    }
+                    docker.build('my-nginx-image:latest', '.')
                 }
             }
         }
