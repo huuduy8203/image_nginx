@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Build Docker Image') {
+        stage('run scripts') {
             steps {
                 sh "pwd"
                 sh "whoami"
