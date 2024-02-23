@@ -1,24 +1,19 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:20.10.7'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     stages {
-        stage('Checkout') {
+        stage('Build Docker Image') {
             steps {
-                // Clone your Git repository
-                git 'https://github.com/huuduy8203/image_nginx.git'
+                script {
+                    dockerImage = docker.build('my-nginx-image')
+                }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Run Docker Container') {
             steps {
-                // Build Docker image for Nginx
                 script {
-                    docker.build('my-nginx-image:latest', '.')
+                    docker.run('-p 8080:80 --name my-nginx-container my-nginx-image')
                 }
             }
         }
