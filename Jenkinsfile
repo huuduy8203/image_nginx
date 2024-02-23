@@ -4,6 +4,13 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
+                sh "pwd"
+                sh "whoami"
+                sh "ls -al"
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
                 script {
                     dockerImage = docker.build('my-nginx-image')
                 }
