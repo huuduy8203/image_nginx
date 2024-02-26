@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REGISTRY_CREDENTIALS = credentials('my-registry-credentials')
+    DOCKER_REGISTRY_CREDENTIALS = credentials('my-registry-credentials')
     }
     stages {
         stage('Declarative: Checkout SCM') {
