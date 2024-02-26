@@ -1,26 +1,21 @@
 pipeline {
     agent any
-
     stages {
-        stage('run scripts') {
+        stage('Declarative: Checkout SCM') {
             steps {
-                sh "pwd"
-                sh "whoami"
-                sh "ls -al"
+                checkout scm
+            }
+        }
+        stage('Run scripts') {
+            steps {
+                sh 'docker build -t my-nginx-image .'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build('my-nginx-image')
-                }
-            }
-        }
-
-        stage('Run Docker Container') {
-            steps {
-                script {
-                    docker.run('-p 8080:80 --name my-nginx-container my-nginx-image')
+                    def nginxImage = docker.image('my-nginx-image')
+                    nginxImage.run('-p 8080:80 --name my-nginx-container')
                 }
             }
         }
