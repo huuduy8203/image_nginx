@@ -19,9 +19,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    withDockerRegistry([credentialsId: 'my-registry-credentials', url: 'https://hub.docker.com']) {
-                        def nginxImage = docker.image("my-nginx-image")
-                        nginxImage.push("latest")
+                    docker.withRegistry('my-registry-credentials') {
+                        docker.build('my-nginx-image')
                     }
                 }
             }
