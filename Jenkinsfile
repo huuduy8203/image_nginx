@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKER_REGISTRY_CREDENTIALS = credentials('my-registry-credentials')
+    }
     stages {
         stage('Declarative: Checkout SCM') {
             steps {
@@ -9,16 +11,17 @@ pipeline {
         }
         stage('Run scripts') {
             steps {
-                sh 'docker build -t my-nginx-image .'
+                script {
+                    docker.build("my-nginx-image")
+                }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.example.com', 'my-registry-credentials') {
-                        def nginxImage = docker.image('my-nginx-image')
-                        def myContainer = nginxImage.run('-p 8081:80', '--name my-nginx-container')
-                        myContainer.stop()
+                    withDockerRegistry([credentialsId: 'my-registry-credentials', url: 'https://your-docker-registry-url']) {
+                        def nginxImage = docker.image("my-nginx-image")
+                        nginxImage.push("latest")
                     }
                 }
             }
